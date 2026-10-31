@@ -4,90 +4,602 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fatih Esen | /home/fatih</title>
+  <meta name="description" content="Fatih Esen - Minimalist Yazılımcı, Arch Linux & Hyprland Aşığı, Klavyesiyle Dünyayı Kodlayanlardan." />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg: #0d1117;
+      --bg: #0b0f14;
+      --card-bg: #121820;
+      --card-hover: #17202b;
+      --border: #232c37;
+      --border-accent: #3b82f6;
       --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --text-bright: #f0f6fc;
       --accent: #58a6ff;
-      --secondary: #8b949e;
-      --border: #30363d;
+      --accent-cyan: #39c5cf;
+      --accent-green: #3fb950;
+      --accent-purple: #bc8cff;
+      --accent-yellow: #e3b341;
+      --accent-red: #f85149;
     }
-    body {
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'JetBrains Mono', 'Consolas', monospace;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 20px;
     }
-    h1, h2, h3 { color: var(--accent); }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .container { max-width: 800px; }
-    .bio { font-size: 1.1em; margin-bottom: 2em; }
-    .quote { color: var(--secondary); font-style: italic; text-align: center; margin: 2em 0; }
-    ul { list-style: none; padding-left: 0; }
-    ul li { margin: 0.8em 0; }
-    ul li strong { color: var(--accent); }
-    .projects a { color: var(--text); }
-    .projects a:hover { color: var(--accent); }
-    footer { margin-top: 4em; text-align: center; color: var(--secondary); font-size: 0.9em; }
-    @media (max-width: 600px) { body { padding: 20px 10px; } }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      line-height: 1.6;
+      padding: 40px 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.04) 0%, transparent 40%);
+    }
+
+    .terminal-window {
+      width: 100%;
+      max-width: 900px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Terminal Header */
+    .terminal-header {
+      background: #0d1218;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .window-title {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.5px;
+    }
+
+    .window-status {
+      font-size: 0.75rem;
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .window-status::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 8px var(--accent-green);
+    }
+
+    /* Terminal Body */
+    .terminal-body {
+      padding: 32px 28px;
+      overflow-y: auto;
+    }
+
+    .prompt-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    .prompt-user { color: var(--accent-green); font-weight: 700; }
+    .prompt-at { color: var(--text-muted); }
+    .prompt-host { color: var(--accent); font-weight: 700; }
+    .prompt-path { color: var(--accent-purple); }
+    .prompt-cmd { color: var(--text-bright); font-weight: 600; }
+
+    /* Hero / Intro */
+    .hero {
+      margin-bottom: 36px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: var(--text-bright);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    h1 .accent-text {
+      color: var(--accent);
+    }
+
+    .bio {
+      color: var(--text);
+      font-size: 1.05rem;
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+
+    .btn-primary {
+      background: rgba(88, 166, 255, 0.12);
+      color: var(--accent);
+      border-color: rgba(88, 166, 255, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent);
+      color: #0b0f14;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #161e28;
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: var(--card-hover);
+      border-color: var(--text-muted);
+      color: var(--text-bright);
+      transform: translateY(-2px);
+    }
+
+    /* Fastfetch Box */
+    .fastfetch-box {
+      background: #090d12;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 36px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .ascii-logo {
+      color: var(--accent-cyan);
+      font-size: 0.8rem;
+      line-height: 1.15;
+      white-space: pre;
+      user-select: none;
+      font-weight: 700;
+    }
+
+    .sys-specs {
+      font-size: 0.88rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .spec-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .spec-key {
+      color: var(--accent);
+      min-width: 90px;
+      font-weight: 600;
+    }
+
+    .spec-val {
+      color: var(--text-bright);
+    }
+
+    /* Section Styling */
+    .section-title {
+      font-size: 1.25rem;
+      color: var(--text-bright);
+      margin: 36px 0 18px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    .section-title .prefix {
+      color: var(--accent-purple);
+      font-weight: 700;
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .project-card {
+      background: #0d131a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent);
+      background: var(--card-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .project-card h3 {
+      font-size: 1.05rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .project-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #17212e;
+      color: var(--accent-cyan);
+      border: 1px solid rgba(57, 197, 207, 0.25);
+    }
+
+    /* Skills Cloud */
+    .skills-category {
+      margin-bottom: 16px;
+    }
+
+    .skills-category-title {
+      font-size: 0.9rem;
+      color: var(--accent-yellow);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-pill {
+      background: #0d131a;
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: var(--text-bright);
+    }
+
+    .skill-pill:hover {
+      border-color: var(--accent-purple);
+      color: var(--accent-purple);
+    }
+
+    /* Philosophy Quote */
+    .quote-box {
+      margin: 40px 0 20px 0;
+      padding: 16px 20px;
+      border-left: 3px solid var(--accent);
+      background: rgba(88, 166, 255, 0.05);
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 680px) {
+      body { padding: 12px; }
+      .terminal-body { padding: 20px 16px; }
+      .fastfetch-box {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        text-align: left;
+      }
+      .ascii-logo { display: none; }
+      h1 { font-size: 1.6rem; }
+    }
   </style>
-  <!-- JetBrains Mono fontu (isteğe bağlı, yoksa sistem fontu kullanır) -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
 </head>
 <body>
-  <div class="container">
-    <h1>Merhaba, ben Fatih 👋</h1>
-    
-    <p class="bio">
-      */home/fatih* adresinde yaşayan, klavyesiyle dünyayı yönetmeye çalışan bir yazılımcıyım.<br>
-      Minimalistim: gereksiz her şeyi atarım.
-    </p>
 
-    <h2>🔧 Şu sıralar nelerle uğraşıyorum?</h2>
-    <ul>
-      <li>Hyprland'i sıfırdan kuran tek tık scriptler (<a href="https://github.com/FatihEsen/hyprland-full-setup">hyprland-full-setup</a>)</li>
-      <li>Android'de müzik format dönüştürücüler (<a href="https://github.com/FatihEsen/convert">convert</a>)</li>
-      <li>TypeScript + modern web projeleri</li>
-      <li>Bireysel finans takibi araçları (<a href="https://github.com/FatihEsen/financeflow">financeflow</a>)</li>
-      <li>Eski usul minimalizm: suckless, LARBS, dwm ricing</li>
-    </ul>
-
-    <h2>🛠️ Teknoloji & Araç Kutusu</h2>
-    <ul>
-      <li><strong>WM / DE</strong> → Hyprland • dwm • bspwm</li>
-      <li><strong>Editor</strong> → Neovim</li>
-      <li><strong>Shell</strong> → zsh + custom scripts</li>
-      <li><strong>Languages</strong> → TypeScript • Java • Python • Shell • biraz C</li>
-      <li><strong>AI & Assistant</strong> → Grok (yalan söylemiyor, saçmalamıyor 🚀)</li>
-      <li><strong>Diğer</strong> → Arch, Android (Kotlin/Java), Hugo, Git</li>
-    </ul>
-
-    <h2>📌 En gurur duyduklarım</h2>
-    <div class="projects">
-      <ul>
-        <li><a href="https://github.com/FatihEsen/hyprland-full-setup">hyprland-full-setup</a> → Bir scriptle tam Hyprland + rice kurulumu</li>
-        <li><a href="https://github.com/FatihEsen/convert">convert</a> → Android müzik format dönüştürücü</li>
-        <li><a href="https://github.com/FatihEsen/financeflow">financeflow</a> → Kişisel finans takibi (geliştirme aşamasında)</li>
-      </ul>
+  <div class="terminal-window">
+    <!-- Terminal Title Bar -->
+    <div class="terminal-header">
+      <div class="window-controls">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <div class="window-title">fatih@archlinux: ~ (hyprland/wayland)</div>
+      <div class="window-status">ONLINE</div>
     </div>
 
-    <h2>📫 İletişim</h2>
-    <ul>
-      <li>X → <a href="https://x.com/bubibaz">@bubibaz</a></li>
-      <li>E-posta → <a href="mailto:fatihesen@gmail.com">fatihesen@gmail.com</a></li>
-    </ul>
+    <!-- Terminal Content Area -->
+    <div class="terminal-body">
+      
+      <div class="prompt-line">
+        <span class="prompt-user">fatih</span><span class="prompt-at">@</span><span class="prompt-host">archlinux</span>:<span class="prompt-path">~</span><span class="prompt-cmd">$ whoami</span>
+      </div>
 
-    <p class="quote">"Minimalizm karmaşıklığı değil, gereksiz her şeyi atmaktır."</p>
+      <div class="hero">
+        <h1>Merhaba, ben <span class="accent-text">Fatih</span> 👋</h1>
+        <p class="bio">
+          <strong>/home/fatih</strong> adresinde yaşayan, klavyesiyle dünyayı yönetmeye çalışan bir yazılımcıyım.<br>
+          Minimalistim: gereksiz her şeyi atar, saf işlevsellik ve performansa odaklanırım.
+        </p>
 
-    <footer>
-      &copy; <script>document.write(new Date().getFullYear());</script> Fatih Esen • Powered by Arch + Neovim
-    </footer>
+        <div class="quick-actions">
+          <a href="https://github.com/FatihEsen" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub Profilim
+          </a>
+          <a href="https://x.com/bubibaz" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            @bubibaz (X)
+          </a>
+          <button id="copy-email-btn" class="btn btn-secondary" onclick="copyEmail()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <span id="copy-text">E-posta Kopyala</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Fastfetch Box -->
+      <div class="prompt-line">
+        <span class="prompt-user">fatih</span><span class="prompt-at">@</span><span class="prompt-host">archlinux</span>:<span class="prompt-path">~</span><span class="prompt-cmd">$ fastfetch --minimal</span>
+      </div>
+
+      <div class="fastfetch-box">
+        <div class="ascii-logo">
+      /\
+     /  \
+    /\   \
+   /      \
+  /   ,,   \
+ /   |  |  -\
+/_-''    ''-_/
+        </div>
+        <div class="sys-specs">
+          <div class="spec-row"><span class="spec-key">OS:</span><span class="spec-val">Arch Linux x86_64</span></div>
+          <div class="spec-row"><span class="spec-key">WM:</span><span class="spec-val">Hyprland (wayland) • dwm • bspwm</span></div>
+          <div class="spec-row"><span class="spec-key">Editor:</span><span class="spec-val">Neovim (pure lua, minimalist)</span></div>
+          <div class="spec-row"><span class="spec-key">Shell:</span><span class="spec-val">zsh + custom scripts</span></div>
+          <div class="spec-row"><span class="spec-key">AI:</span><span class="spec-val">Grok (yalan söylemiyor, saçmalamıyor 🚀)</span></div>
+          <div class="spec-row"><span class="spec-key">Focus:</span><span class="spec-val">Hyprland Ricing, Android Audio Tools, TS</span></div>
+        </div>
+      </div>
+
+      <!-- Projects Section -->
+      <div class="prompt-line">
+        <span class="prompt-user">fatih</span><span class="prompt-at">@</span><span class="prompt-host">archlinux</span>:<span class="prompt-path">~</span><span class="prompt-cmd">$ ls -la ~/projects</span>
+      </div>
+
+      <div class="section-title">
+        <span class="prefix">#</span> En Gurur Duyduklarım & Projeler
+      </div>
+
+      <div class="projects-grid">
+        <a href="https://github.com/FatihEsen/hyprland-full-setup" target="_blank" rel="noopener noreferrer" class="project-card">
+          <div>
+            <h3>hyprland-full-setup <span>↗</span></h3>
+            <p>Tek bir betikle sıfırdan eksiksiz Hyprland ve modern rice kurulumu sağlayan otomasyon.</p>
+          </div>
+          <div class="project-tags">
+            <span class="tag">Shell</span>
+            <span class="tag">Arch Linux</span>
+            <span class="tag">Wayland</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/FatihEsen/convert" target="_blank" rel="noopener noreferrer" class="project-card">
+          <div>
+            <h3>convert <span>↗</span></h3>
+            <p>Android cihazlar için tasarlanmış, sade ve modern müzik/ses format dönüştürücü aracı.</p>
+          </div>
+          <div class="project-tags">
+            <span class="tag">Android</span>
+            <span class="tag">Kotlin/Java</span>
+            <span class="tag">Audio</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/FatihEsen/financeflow" target="_blank" rel="noopener noreferrer" class="project-card">
+          <div>
+            <h3>financeflow <span>↗</span></h3>
+            <p>Bireysel bütçe ve harcama takibi için pratik, net ve kafa karıştırmayan finans aracı.</p>
+          </div>
+          <div class="project-tags">
+            <span class="tag">TypeScript</span>
+            <span class="tag">Web</span>
+            <span class="tag">Finance</span>
+          </div>
+        </a>
+
+        <div class="project-card" style="border-style: dashed;">
+          <div>
+            <h3>dwm & suckless rice</h3>
+            <p>Eski usul minimalizm: C ile yamalanmış dwm, st, dmenu ve LARBS esintili dotfile koleksiyonu.</p>
+          </div>
+          <div class="project-tags">
+            <span class="tag">C</span>
+            <span class="tag">Unix Porn</span>
+            <span class="tag">Suckless</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech Stack -->
+      <div class="section-title">
+        <span class="prefix">#</span> Teknoloji & Araç Kutusu
+      </div>
+
+      <div class="skills-category">
+        <div class="skills-category-title">Sistem & Masaüstü (Rice)</div>
+        <div class="skills-list">
+          <span class="skill-pill">Arch Linux</span>
+          <span class="skill-pill">Hyprland</span>
+          <span class="skill-pill">dwm</span>
+          <span class="skill-pill">bspwm</span>
+          <span class="skill-pill">Waybar</span>
+          <span class="skill-pill">Neovim</span>
+          <span class="skill-pill">Zsh</span>
+        </div>
+      </div>
+
+      <div class="skills-category">
+        <div class="skills-category-title">Programlama & Geliştirme</div>
+        <div class="skills-list">
+          <span class="skill-pill">TypeScript</span>
+          <span class="skill-pill">JavaScript</span>
+          <span class="skill-pill">Python</span>
+          <span class="skill-pill">Java</span>
+          <span class="skill-pill">Kotlin</span>
+          <span class="skill-pill">Shell / Bash</span>
+          <span class="skill-pill">C</span>
+        </div>
+      </div>
+
+      <div class="skills-category">
+        <div class="skills-category-title">Araçlar & Platformlar</div>
+        <div class="skills-list">
+          <span class="skill-pill">Git</span>
+          <span class="skill-pill">Android Studio</span>
+          <span class="skill-pill">Hugo</span>
+          <span class="skill-pill">Linux CLI</span>
+          <span class="skill-pill">Grok AI</span>
+        </div>
+      </div>
+
+      <!-- Quote -->
+      <div class="quote-box">
+        "Minimalizm karmaşıklığı değil, gereksiz her şeyi atmaktır."
+      </div>
+
+      <!-- Footer -->
+      <footer>
+        &copy; <span id="year">2026</span> Fatih Esen • Powered by Arch Linux + Neovim<br>
+        <small style="color: var(--text-muted);">Sıfır gereksiz yük, saf verimlilik.</small>
+      </footer>
+
+    </div>
   </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function copyEmail() {
+      const email = 'fatihesen@gmail.com';
+      navigator.clipboard.writeText(email).then(() => {
+        const textSpan = document.getElementById('copy-text');
+        const orig = textSpan.textContent;
+        textSpan.textContent = 'Kopyalandı! ✓';
+        setTimeout(() => {
+          textSpan.textContent = orig;
+        }, 2000);
+      }).catch(() => {
+        window.location.href = 'mailto:fatihesen@gmail.com';
+      });
+    }
+  </script>
 </body>
 </html>
